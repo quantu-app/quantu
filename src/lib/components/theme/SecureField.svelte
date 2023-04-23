@@ -15,11 +15,12 @@
 </script>
 
 <input
-  type="text"
+  type="password"
   name={name}
-  class:error={hasErrors}
   placeholder={placeholder.length > 0 ?  placeholder : ''}
   bind:value={value}
+
+  class:error={hasErrors}
   class="{baseClasses} {styleClasses}"/>
 {#if hasErrors}
   {#each errors as err}

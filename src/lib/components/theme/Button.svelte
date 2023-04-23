@@ -1,5 +1,6 @@
 <script lang="ts">
   export let label: string;
+  export let formaction: string = '';
   export let buttonStyle: "borderless" | "bordered" | "borderedProminent" = "borderedProminent"
   export let controlSize: "mini" | "small" | "regular" | "large" = "regular";
 
@@ -31,8 +32,16 @@
   $: btnClasses = buttonStyleClasses(buttonStyle);
 </script>
 
+{#if formaction.length > 0}
+<button
+  formaction={formaction}
+  type="submit"
+  class="{sizeClasses} {btnClasses}"
+  >{label}</button>
+{:else}
 <button
   type="button"
   class="{sizeClasses} {btnClasses}"
   on:click
   >{label}</button>
+{/if}
