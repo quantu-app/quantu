@@ -20,11 +20,11 @@
   const buttonStyleClasses = (buttonStyle) => {
     switch(buttonStyle) {
       case "borderless":
-        return "text-systemBlue-light"
+        return "text-systemBlue-light hover:opacity-80"
       case "bordered":
-        return "text-systemBlue-light bg-systemGray5-light"
+        return "text-systemBlue-light bg-systemGray5-light hover:opacity-90 active:text-systemBlue2-light"
       case "borderedProminent":
-        return "text-white bg-systemBlue-light"
+        return "text-white bg-systemBlue-light hover:opacity-90 active:bg-systemBlue2-light"
     }
   }
 
@@ -36,12 +36,12 @@
 <button
   formaction={formaction}
   type="submit"
-  class="{sizeClasses} {btnClasses}"
+  class="focus:outline-none {sizeClasses} {btnClasses}"
   >{label}</button>
 {:else}
 <button
   type="button"
-  class="{sizeClasses} {btnClasses}"
+  class="focus:outline-none {sizeClasses} {btnClasses}"
   on:click
   >{label}</button>
 {/if}
