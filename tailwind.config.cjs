@@ -38,6 +38,10 @@ const config = {
 					light: 'rgb(0,122,255)',
 					dark: 'rgb(10,132,255)'
 				},
+				systemBlue2: {
+					light: 'rgb(0,113,232)',
+					dark: 'rgb(6,109,218)'
+				},
 				systemIndigo: {
 					light: 'rgb(88,86,214)',
 					dark: 'rgb(94,92,230)'

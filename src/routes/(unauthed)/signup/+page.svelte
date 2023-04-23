@@ -52,6 +52,9 @@
 				bind:value={passwordConfirmation}
 			/>
 		</div>
-		<Button label={$_("users.signup.button")} formaction="?/signup" />
+		<Button 
+			formaction="?/signup"
+			buttonStyle="borderedProminent"
+			label={$_("users.signup.button")} />
 	</form>
 </div>
