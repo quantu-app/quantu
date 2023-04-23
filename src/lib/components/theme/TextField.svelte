@@ -7,9 +7,8 @@
   let errorClasses = "text-systemRed-light border-systemRed-light"
   let okClasses = "text-systemBlue-light border-systemBlue-light"
 
-  $: hasErrors = errors.length > 0;
-  $: styleClasses = hasErrors ?  errorClasses : okClasses;
-
+  $: hasErrors = errors.length > 0
+  $: styleClasses = hasErrors ?  errorClasses : okClasses
 </script>
 
 <input 

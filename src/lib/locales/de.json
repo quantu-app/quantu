@@ -1,0 +1,10 @@
+{
+  "users" : {
+    "signup" : {
+      "heading" : "Registrieren",
+      "button" : "Registrieren",
+      "signin_prompt" : "Bereits ein Konto?",
+      "signin" : "Anmelden"
+    }
+  }
+}
