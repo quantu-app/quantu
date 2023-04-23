@@ -6,8 +6,6 @@
 	import Spinner from '$lib/components/Spinner.svelte'
 
 	import { isLoading, locale } from 'svelte-i18n';
-
-	locale.set("en");
 </script>
 
 {#if $isLoading}

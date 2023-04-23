@@ -68,7 +68,7 @@
     "@aicacia/json": "^0.1.16",
     "@aicacia/rand": "^0.2.14",
     "@aicacia/range": "^0.1.4",
-    "@prisma/client": "^4.12.0",
+    "@prisma/client": "^4.13.0",
     "@svelte-put/clickoutside": "^2.0.0",
     "bcrypt": "^5.1.0",
     "jsonwebtoken": "^9.0.0",

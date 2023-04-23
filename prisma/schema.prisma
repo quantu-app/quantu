@@ -10,7 +10,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// User
+//===========================
+// USERS 
+//===========================
 model User {
   @@map("users")
   id Int @id @default(autoincrement())
@@ -25,9 +27,9 @@ model User {
   updatedAt DateTime @updatedAt
 
   // relations
-  emails       Email[]
-  oldPasswords OldPasswords[]
-  settings     ApplicationSettings?
+  emails              Email[]
+  oldPasswords        OldPasswords[]
+  applicationSettings ApplicationSettings?
 }
 
 model Email {
@@ -79,4 +81,7 @@ model ApplicationSettings {
   // relations
   user   User @relation(fields: [userId], references: [id])
   userId Int  @unique
+
+  // indices
+  @@unique([userId, id])
 }

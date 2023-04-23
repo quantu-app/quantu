@@ -75,9 +75,21 @@ export const actions: Actions = {
 		try {
 			const username = data.get('username') as string;
 			const encryptedPassword = await hash(password, +HASH_ROUNDS);
-			const user = await run((client) =>
-				client.user.create({ data: { username, encryptedPassword } })
-			);
+			const user = await run((client) => {
+				const newUser = client.user.create({ 
+					data: {
+						username,
+						encryptedPassword,
+						applicationSettings: {
+							create: {
+								locale: "en"
+							}
+						}
+					}
+				})
+
+				return newUser;
+			});
 			event.cookies.set(
 				'token',
 				await jsonwebtoken.sign({ user_id: user.id }, env.JWT_SECRET, {
@@ -85,6 +97,7 @@ export const actions: Actions = {
 				})
 			);
 		} catch (error) {
+			// TODO: make this error generic
 			console.error(error);
 			return fail(500, {
 				username: [{ type: 'error', value: 'server_error' }] as IInputMessage[]
