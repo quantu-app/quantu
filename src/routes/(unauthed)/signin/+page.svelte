@@ -4,6 +4,7 @@
 	import { base } from '$app/paths';
 	import { enhance } from '$app/forms';
 	import InputMessages from '$lib/components/InputMessages.svelte';
+	import TextField from '$lib/components/theme/TextField.svelte';
 	import type { ActionData } from './$types';
 
 	let username = '';

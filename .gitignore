@@ -8,4 +8,6 @@ node_modules
 /package
 build.pem
 .env
+.env.*
+.envrc
 !.env.example
