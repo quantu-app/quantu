@@ -1,10 +1,15 @@
+<script lang="ts" context="module">
+	export type ButtonStyle = "borderless" | "bordered" | "borderedProminent";
+  export type ControlSize = "mini" | "small" | "regular" | "large";
+</script>
+
 <script lang="ts">
   export let label: string;
   export let formaction: string = '';
-  export let buttonStyle: "borderless" | "bordered" | "borderedProminent" = "borderedProminent"
-  export let controlSize: "mini" | "small" | "regular" | "large" = "regular";
+  export let buttonStyle: ButtonStyle = "borderedProminent"
+  export let controlSize: ControlSize  = "regular";
 
-  const sizingClasses = (controlSize) => {
+  const sizingClasses = (controlSize: ControlSize) => {
     switch(controlSize) {
       case "mini":
         return "text-xs p-0 rounded"
@@ -17,7 +22,7 @@
     }
   }
 
-  const buttonStyleClasses = (buttonStyle) => {
+  const buttonStyleClasses = (buttonStyle: ButtonStyle) => {
     switch(buttonStyle) {
       case "borderless":
         return "text-systemBlue-light hover:opacity-80"
