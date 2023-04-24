@@ -1,6 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
-import type { IInputMessage } from '$lib/components/InputMessages.svelte';
 import { base } from '$app/paths';
 import { run } from '$lib/prisma';
 import { hash } from 'bcrypt';
@@ -9,10 +8,7 @@ import { HASH_ROUNDS } from '$env/static/private';
 import { env } from '$env/dynamic/private';
 import type { ErrorMessage } from '$lib/types';
 
-const usernameValidator = (value: FormDataEntryValue | null): ErrorMessage[] => {
-	if (!value) {
-		return [{ message: "Username cannot be empty"}];
-	}
+const usernameValidator = (value: string): ErrorMessage[] => {
 	let cValue = value as string;
 	const validRegex =  /^[a-z0-9]+$/
 	cValue = cValue.trim().toLowerCase()
@@ -26,67 +22,68 @@ const usernameValidator = (value: FormDataEntryValue | null): ErrorMessage[] => 
 	return errors
 }
 
-const passwordValidator = (value: FormDataEntryValue | null): ErrorMessage[] => {
-	if (!value) {
-		return [{ message: "Password cannot be empty" }]
-	}
-	const cValue = value as string;
+const passwordValidator = (value: string): ErrorMessage[] => {
 	const minPasswordLen = parseInt(env.USERS_MIN_PASSWORD_LENGTH)
-	const errors = [];
-	if (cValue.length < minPasswordLen) {
-		errors.push({ message: `Password must be at least ${minPasswordLen} characters long` });
+	if (value.length < minPasswordLen) {
+		return [{ message: `Password must be at least ${minPasswordLen} characters long` }];
+	} else {
+		return []
 	}
-	return errors
 }
 
-const passwordConfirmationValidator = (value: FormDataEntryValue | null, password: string): ErrorMessage[] => {
-	if (!value) {
-		return [{ message: "Password confirmation cannot be empty"}]
+const passwordConfirmationValidator = (value: string, password: string): ErrorMessage[] => {
+	if (value !== password) {
+		return [{ message: "Password and password confirmation must be the same"}]
+	} else {
+		return []
 	}
-	const cValue = value as string;
-	const errors = [];
-	if (cValue !== password) {
-		errors.push({ message: "Password and password confirmation must be the same"})
-	}
-
-	return errors
 }
 
 export const actions: Actions = {
 	signup: async (event) => {
-		const data = await event.request.formData();
+		// GET DATA
+		const data = Object.fromEntries(await event.request.formData());
+		const username = data.username as string;
+		const password = data.password as string;
+		const passwordConfirmation = data.passwordConfirmation as string;
+
+		if (!username) { return fail(422, { username: [{ message: "Username cannot be empty"}] }) }
+		if (!password) { return fail(422, { password: [{ message: "Password cannot be empty"}] }) }
+		if (!passwordConfirmation) { return fail(422, { passwordConfirmation: [{ message: "Password confirmation cannot be empty"}] }) }
 	
-		const usernameErrors = usernameValidator(data.get('username'));
+		const usernameErrors = usernameValidator(username);
 		if (usernameErrors.length > 0) {
 			return fail(400, { username: usernameErrors });
 		}
 
-		const password = data.get('password') as string;
-		const passwordErrors = passwordValidator(data.get('password'));
+		const passwordErrors = passwordValidator(password);
 		if (passwordErrors.length > 0) {
 			return fail(400, { password: passwordErrors });
 		}
-		const passwordConfirmationErrors = passwordConfirmationValidator(data.get('passwordConfirmation'), password);
+		const passwordConfirmationErrors = passwordConfirmationValidator(
+			data.passwordConfirmation as string, password);
 		if (passwordConfirmationErrors.length > 0) {
 			return fail(400, { passwordConfirmation: passwordConfirmationErrors });
 		}
 
 
 		try {
-			const username = data.get('username') as string;
 			const encryptedPassword = await hash(password, +HASH_ROUNDS);
 			const user = await run((client) => {
 				const newUser = client.user.create({ 
 					data: {
 						username,
 						encryptedPassword,
+						confirmed: false,
 						applicationSettings: {
 							create: {
-								locale: "en"
+								locale: "en" // TODO: Set locale from user's browser
 							}
 						}
 					}
 				})
+
+				// TODO: Send confirmation Email
 
 				return newUser;
 			});
@@ -98,9 +95,8 @@ export const actions: Actions = {
 			);
 		} catch (error) {
 			// TODO: make this error generic
-			console.error(error);
 			return fail(500, {
-				username: [{ type: 'error', value: 'server_error' }] as IInputMessage[]
+				global: [{ message: "something went wrong" }]
 			});
 		}
 		throw redirect(303, `${base}/`);

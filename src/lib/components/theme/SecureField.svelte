@@ -5,6 +5,7 @@
   export let name: string;
   export let placeholder: string = '';
   export let errors: ErrorMessage[] = [];
+  export let showErrors = true;
 
   let baseClasses = "w-full block border rounded-lg bg-white"
   let errorClasses = "text-systemRed-light border-systemRed-light"
@@ -22,7 +23,7 @@
 
   class:error={hasErrors}
   class="{baseClasses} {styleClasses}"/>
-{#if hasErrors}
+{#if hasErrors && showErrors}
   {#each errors as err}
     <span class="text-xs text-systemRed-light">{err.message}</span>
   {/each}

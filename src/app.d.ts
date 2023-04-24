@@ -1,15 +1,13 @@
 /// <reference types="@sveltejs/kit" />
 /// <reference types="@types/vite" />
 
-import type { User } from '@prisma/client';
-import type { Locale } from 
+import type { IPublicUser } from "$lib/contexts/users/presenters";
 
 declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			user: User | null;
-			locale: Locale
+			user: IPublicUser | null;
 		}
 		// interface PageData {}
 		// interface Platform {}

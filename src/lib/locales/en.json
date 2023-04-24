@@ -1,15 +1,21 @@
 {
   "users" : {
+    "form_fields" : {
+      "username" : "Username",
+      "password" : "Password",
+      "password_confirmation" : "Password confirmation"
+    },
+    "signin" : {
+      "heading" : "Sign in",
+      "button" : "Sign in",
+      "signup_prompt" : "Not a member?",
+      "signup_link" : "Sign up"
+    },
     "signup" : {
       "heading" : "Sign up",
       "button" : "Sign up",
       "signin_prompt" : "Already a member?",
-      "signin" : "Sign in",
-      "form" : {
-        "username" : "Username",
-        "password" : "Password",
-        "password_confirmation" : "Password confirmation"
-      }
+      "signin_link" : "Sign in"
     }
   }
 }

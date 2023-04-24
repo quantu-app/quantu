@@ -1,14 +1,13 @@
 const plugin = require('tailwindcss/plugin');
+const defaultTheme = require('tailwindcss/defaultTheme')
 
 /** @type {import('tailwindcss/tailwind-config').TailwindConfig} */
 const config = {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
 		screens: {
-			sm: '320px',
-			md: '480px',
-			lg: '768px',
-			xl: '1024px'
+			xs: '320px',
+			...defaultTheme.screens
 		},
 		extend: {
 			colors: {
