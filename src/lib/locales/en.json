@@ -1,4 +1,12 @@
 {
+  "app" : {
+    "name" : "Fit Logger",
+    "name_short" : "FL"
+  },
+  "nav" : {
+    "signup" : "Sign up",
+    "signin" : "Login"
+  },
   "users" : {
     "form_fields" : {
       "username" : "Username",
