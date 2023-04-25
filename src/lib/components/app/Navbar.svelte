@@ -24,10 +24,14 @@
         <div class="flex">
           <ul class="ml-5 items-center flex sm:space-x-4">
             <li>
-              <Link href={`${base}/about`} class="p-2 hover:bg-slate-200">{$_("app.name")}</Link>
+              <Link
+                href={`${base}/infos/about`}
+                class="p-2 hover:bg-slate-200">{$_("nav.about")}</Link>
             </li>
             <li>
-              <Link href={`${base}/blog`} class="p-2 hover:bg-slate-200">{$_("app.name_short")}</Link>
+              <Link
+                href={`${base}/blog`}
+                class="p-2 hover:bg-slate-200">{$_("nav.blog")}</Link>
             </li>
           </ul>
         </div>

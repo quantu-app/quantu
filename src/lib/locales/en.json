@@ -5,7 +5,9 @@
   },
   "nav" : {
     "signup" : "Sign up",
-    "signin" : "Login"
+    "signin" : "Login",
+    "blog" : "Blog",
+    "about" : "About"
   },
   "users" : {
     "form_fields" : {
