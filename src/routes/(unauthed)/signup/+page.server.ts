@@ -7,19 +7,16 @@ import jsonwebtoken from 'jsonwebtoken';
 import { HASH_ROUNDS } from '$env/static/private';
 import { env } from '$env/dynamic/private';
 import type { ErrorMessage } from '$lib/types';
+import { getMessageFormatter, locale } from 'svelte-i18n';
 
 const usernameValidator = (value: string): ErrorMessage[] => {
-	let cValue = value as string;
 	const validRegex =  /^[a-z0-9]+$/
-	cValue = cValue.trim().toLowerCase()
-	const errors = [];
-	if (!cValue) {
-		errors.push({ message: "Username cannot be empty"})
+	value = value.trim().toLowerCase()
+	if (!validRegex.test(value)) {
+		return [{ message: "Username can only contain number and letters"}]
+	} else {
+		return []
 	}
-	if (!validRegex.test(cValue)) {
-		errors.push({ message: "Username can only contain number and letters"})
-	}
-	return errors
 }
 
 const passwordValidator = (value: string): ErrorMessage[] => {
@@ -47,7 +44,10 @@ export const actions: Actions = {
 		const password = data.password as string;
 		const passwordConfirmation = data.passwordConfirmation as string;
 
-		if (!username) { return fail(422, { username: [{ message: "Username cannot be empty"}] }) }
+		// TODO: How do we translate server side
+		const result = getMessageFormatter("forms.empty_field", ).format({ field: "Username"})
+
+		if (!username) { return fail(422, { username: [{ message: result as string }] }) }
 		if (!password) { return fail(422, { password: [{ message: "Password cannot be empty"}] }) }
 		if (!passwordConfirmation) { return fail(422, { passwordConfirmation: [{ message: "Password confirmation cannot be empty"}] }) }
 	

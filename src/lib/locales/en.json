@@ -9,6 +9,9 @@
     "blog" : "Blog",
     "about" : "About"
   },
+  "forms" : {
+    "empty_field" : "{field} cannot be empty"
+  },
   "users" : {
     "form_fields" : {
       "username" : "Username",
