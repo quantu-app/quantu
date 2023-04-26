@@ -1,13 +1,12 @@
 {
   "app" : {
-    "name" : "Fit Logger",
-    "name_short" : "FL"
+    "name" : "QuantU",
+    "name_short" : "QU"
   },
   "nav" : {
     "signup" : "Sign up",
     "signin" : "Login",
-    "blog" : "Blog",
-    "about" : "About"
+    "challenges" : "Challenges"
   },
   "forms" : {
     "empty_field" : "{field} cannot be empty"

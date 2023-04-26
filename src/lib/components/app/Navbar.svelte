@@ -25,13 +25,8 @@
           <ul class="ml-5 items-center flex sm:space-x-4">
             <li>
               <Link
-                href={`${base}/infos/about`}
-                class="p-2 hover:bg-slate-200">{$_("nav.about")}</Link>
-            </li>
-            <li>
-              <Link
-                href={`${base}/blog`}
-                class="p-2 hover:bg-slate-200">{$_("nav.blog")}</Link>
+                href={`${base}/challenges`}
+                class="p-2 hover:bg-slate-200">{$_("nav.challenges")}</Link>
             </li>
           </ul>
         </div>
