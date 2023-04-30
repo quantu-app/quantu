@@ -1,7 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { base } from '$app/paths';
-import { run } from '$lib/prisma';
+import { transaction } from '$lib/prisma';
 import { hash } from 'bcrypt';
 import jsonwebtoken from 'jsonwebtoken';
 import { HASH_ROUNDS } from '$env/static/private';
@@ -68,18 +68,22 @@ export const actions: Actions = {
 
 
 		try {
-			const encryptedPassword = await hash(password, +HASH_ROUNDS);
-			const user = await run((client) => {
+			const encrypted_password = await hash(password, +HASH_ROUNDS);
+			const user = await transaction((client) => {
+
+				// create the new user
 				const newUser = client.user.create({ 
 					data: {
 						username,
-						encryptedPassword,
+						encrypted_password,
+						active: true,
 						confirmed: false,
-						applicationSettings: {
+						creator: false,
+						application_setting: {
 							create: {
 								locale: "en" // TODO: Set locale from user's browser
 							}
-						}
+						},
 					}
 				})
 
@@ -95,6 +99,7 @@ export const actions: Actions = {
 			);
 		} catch (error) {
 			// TODO: make this error generic
+			console.log(error);
 			return fail(500, {
 				global: [{ message: "something went wrong" }]
 			});

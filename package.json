@@ -8,7 +8,7 @@
     "vite": "vite",
     "svelte-kit": "svelte-kit",
     "clean": "rm -rf node_modules/.vite .svelte-kit build",
-    "start": "vite dev --host --open",
+    "dev": "vite dev --host --open",
     "build": "vite build",
     "preview": "vite preview",
     "desktop": "npm run tauri dev",

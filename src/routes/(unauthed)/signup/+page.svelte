@@ -20,7 +20,7 @@
 	<h1 class="mb-1">{$_("users.signup.heading") }</h1>
 	<p class="py-2">
 		{$_("users.signup.signin_prompt") }
-		<Link href={`${base}/signin`}>{$_("users.signup.signin_link")}</Link>
+		<a href={`${base}/signin`} class="text-systemBlue-light">{$_("users.signup.signin_link")}</a>
 	</p>
 	<form
 		class="flex flex-col"
