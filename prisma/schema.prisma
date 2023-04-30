@@ -19,18 +19,21 @@ model User {
 
   // attributes
   username          String  @unique
-  encryptedPassword String
+  encrypted_password String
   active            Boolean @default(true)
   confirmed         Boolean @default(false)
   creator           Boolean @default(false)
-  confirmedAt DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  confirmed_at DateTime?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   // relations
-  emails              Email[]
-  oldPasswords        OldPasswords[]
-  applicationSettings ApplicationSettings?
+  emails                  Email[]
+  old_passwords           OldPassword[]
+  application_setting     ApplicationSetting?
+  channel_memberships     ChannelMembership[]
+  challenge_results       ChallengeResult[]
+  challenges              Challenge[]
 }
 
 model Email {
@@ -42,8 +45,8 @@ model Email {
   primary   Boolean @default(false)
   confirmed Boolean @default(false)
   confirmedAt DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   // relations
   user   User @relation(fields: [userId], references: [id])
@@ -53,36 +56,124 @@ model Email {
   @@unique([userId, email])
 }
 
-model OldPasswords {
+model OldPassword {
   @@map("old_passwords")
   id Int @id @default(autoincrement())
 
   // attributes
-  encryptedPassword String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  encrypted_password String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   // relations
   user   User @relation(fields: [userId], references: [id])
   userId Int
 
   // indices
-  @@unique([userId, encryptedPassword])
+  @@unique([userId, encrypted_password])
 }
 
-model ApplicationSettings {
+model ApplicationSetting {
   @@map("application_settings")
   id Int @id @default(autoincrement())
 
   // attributes
   locale String @default("en")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   // relations
-  user   User @relation(fields: [userId], references: [id])
-  userId Int  @unique
+  user   User @relation(fields: [user_id], references: [id])
+  user_id Int  @unique
 
   // indices
-  @@unique([userId, id])
+  @@unique([user_id, id])
+}
+
+enum ChannelMembershipRole {
+  OWNER
+  MEMBER
+}
+
+model ChannelMembership {
+  @@map("channel_memberships")
+  id Int @id @default(autoincrement())
+
+  // attributes
+  role ChannelMembershipRole @default(MEMBER)
+
+  // relations
+  user   User @relation(fields: [user_id], references: [id])
+  user_id Int
+  channel Channel @relation(fields: [channel_id], references: id)
+  channel_id Int
+
+  // indices
+  @@unique([user_id, channel_id])
+}
+
+model Channel {
+  @@map("channels")
+  id Int @id @default(autoincrement())
+
+  // attributes
+  name String
+  uri String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // relations
+  channel_memberships   ChannelMembership[]
+  challenges            Challenge[]
+}
+
+enum ChallengeType {
+  MULTIPLE_CHOICE
+}
+
+model Challenge {
+  @@map("challenges")
+  id Int @id @default(autoincrement())
+
+  // attributes
+  name        String
+  url         String
+  description Json
+  type        ChallengeType @default(MULTIPLE_CHOICE)
+  prompt      Json
+  visible     Boolean   @default(false)
+  released_at DateTime?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  // relations
+  channel   Channel @relation(fields: [channel_id], references: [id])
+  channel_id Int
+  creator    User @relation(fields: [creator_id], references: [id])
+  creator_id Int
+  challenge_results   ChallengeResult[]
+
+  @@unique([channel_id, url])
+}
+
+model ChallengeResult {
+  @@map("challenge_results")
+  id Int @id @default(autoincrement())
+
+  type   ChallengeType @default(MULTIPLE_CHOICE)
+  prompt Json
+  answer Json
+  score  Float
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // relations
+  user          User        @relation(fields: [user_id], references: [id])
+  user_id       Int
+  challenge     Challenge   @relation(fields: [challenge_id], references: [id])
+  challenge_id   Int
+
+  // indices
+  @@unique([user_id, challenge_id])
 }

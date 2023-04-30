@@ -70,12 +70,16 @@
     "@aicacia/range": "^0.1.4",
     "@prisma/client": "^4.13.0",
     "@svelte-put/clickoutside": "^2.0.0",
+    "@types/katex": "^0.16.0",
     "bcrypt": "^5.1.0",
     "jsonwebtoken": "^9.0.0",
+    "katex": "^0.16.7",
+    "slate": "^0.94.0",
     "svelte-i18n": "^3.6.0",
     "svelte-icons": "^2.1.0",
     "svelte-localstorage-writable": "^0.1.1",
     "svelte-portal": "^2.2.0",
+    "svelte-slate": "^0.1.81",
     "uuid": "^9.0.0",
     "vest": "^4.6.9"
   }
