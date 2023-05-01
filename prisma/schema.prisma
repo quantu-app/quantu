@@ -103,10 +103,10 @@ model ChannelMembership {
   role ChannelMembershipRole @default(MEMBER)
 
   // relations
-  user   User @relation(fields: [user_id], references: [id])
-  user_id Int
-  channel Channel @relation(fields: [channel_id], references: id)
-  channel_id Int
+  user        User @relation(fields: [user_id], references: [id])
+  user_id     Int
+  channel     Channel @relation(fields: [channel_id], references: id)
+  channel_id  Int
 
   // indices
   @@unique([user_id, channel_id])

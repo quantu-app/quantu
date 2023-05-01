@@ -1,5 +1,7 @@
-import { run } from '$lib/prisma';
-import { ChannelMembershipRole, type Channel } from '@prisma/client';
+import { run, transaction } from '$lib/prisma';
+import type { Channel } from '@prisma/client';
+import { UserNotCreatorError } from '../users/types';
+import type { ChannelCreateParams } from './types';
 
 const find = async (id: number): Promise<Channel> => {
   return await run(async (client) => { 
@@ -10,16 +12,40 @@ const find = async (id: number): Promise<Channel> => {
 
 const isUserOwner = async (channel_id: number, user_id: number): Promise<boolean> => {
   return await run(async (client) => { 
-    const channel = await client.channelMembership.findUnique({ 
+    const channel = await client.channelMembership.findUniqueOrThrow({ 
       where: {
         user_id: user_id,
         channel_id: channel_id,
-        role: ChannelMembershipRole.OWNER
+        role: "OWNER"
       }
     })
     return (channel !== null && channel) ? true : false
   });
 }
 
+const create = async (params: ChannelCreateParams): Promise<Channel> => {
+  return await transaction(async (client) => {
+    const user = await client.user.findUniqueOrThrow({ where: { id: params.owner_id }})
+    if (!user.creator) {
+      throw new UserNotCreatorError()
+    }
 
-export const channelsRepo = { find, isUserOwner };
+    const channel = await client.channel.create({ 
+      data: {
+        name: params.name,
+        uri: params.uri,
+        channel_memberships: {
+          create: {
+            user_id: user.id,
+            role: params.role
+          }
+        }
+      }
+    })
+    
+    return channel;
+  }); 
+}
+
+
+export const channelsRepo = { find, isUserOwner, create };
