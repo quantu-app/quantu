@@ -1,6 +1,6 @@
 import { run, transaction } from '$lib/prisma';
-import type { Channel } from '@prisma/client';
-import { UserNotCreatorError } from '../users/types';
+import { ChannelMembershipRole, type Channel } from '@prisma/client';
+import { UserNotCreatorError } from '$lib/contexts/users/errors';
 import type { ChannelCreateParams } from './types';
 
 const find = async (id: number): Promise<Channel> => {
@@ -11,8 +11,17 @@ const find = async (id: number): Promise<Channel> => {
 }
 
 const findAllForUser = async (user_id: number): Promise<Channel[]> => {
-  return await transaction(async (client) => { 
-    let membership = await client.channelMembership.findMany({ user_id });
+  return await run(async (client) => { 
+    const channels = await client.channel.findMany({ 
+      where: { 
+        channel_memberships: {
+          some: {
+            user_id: user_id
+          }
+        }
+      }
+    });
+    return channels
   });
 }
 
@@ -22,7 +31,7 @@ const isUserOwner = async (channel_id: number, user_id: number): Promise<boolean
       where: {
         user_id: user_id,
         channel_id: channel_id,
-        role: "OWNER"
+        role: ChannelMembershipRole.OWNER
       }
     })
     return (channel !== null && channel) ? true : false
