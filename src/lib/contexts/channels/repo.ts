@@ -10,6 +10,12 @@ const find = async (id: number): Promise<Channel> => {
   });
 }
 
+const findAllForUser = async (user_id: number): Promise<Channel[]> => {
+  return await transaction(async (client) => { 
+    let membership = await client.channelMembership.findMany({ user_id });
+  });
+}
+
 const isUserOwner = async (channel_id: number, user_id: number): Promise<boolean> => {
   return await run(async (client) => { 
     const channel = await client.channelMembership.findUniqueOrThrow({ 
@@ -48,4 +54,9 @@ const create = async (params: ChannelCreateParams): Promise<Channel> => {
 }
 
 
-export const channelsRepo = { find, isUserOwner, create };
+export const channelsRepo = { 
+  find,
+  findAllForUser,
+  isUserOwner,
+  create
+};

@@ -20,7 +20,7 @@ export const actions: Actions = {
 		}
 
 		const user = await run((client) => client.user.findUnique({ where: { username } }));
-		if (!user || !(await compare(password, user.encryptedPassword))) {
+		if (!user || !(await compare(password, user.encrypted_password))) {
 			return fail(400, failMessage);
 		}
 
