@@ -3,7 +3,9 @@ import type { Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import jsonwebtoken, { TokenExpiredError } from 'jsonwebtoken';
 import { usersRepo } from '$lib/contexts/users/repo';
+import { channelsRepo } from '$lib/contexts/channels/repo';
 import { toPublicUserJSON } from '$lib/contexts/users/presenters';
+import { toPublicChannelView } from '$lib/contexts/channels/presenters';
 import { Prisma } from '@prisma/client';
 import { InactiveUserError } from "$lib/contexts/users/errors";
 
@@ -23,7 +25,9 @@ const setUser: Handle = async ({ event, resolve }) => {
 			if (!user.active) {
 				throw new InactiveUserError()
 			}
+
 			event.locals.user = toPublicUserJSON(user);
+
 		} catch (error) {
 			if (error instanceof TokenExpiredError) {
 				event.cookies.delete("token")
@@ -36,7 +40,21 @@ const setUser: Handle = async ({ event, resolve }) => {
 		}
 	}
 
+	return await resolve(event);
+};
+
+const setActiveChannel: Handle = async ({ event, resolve }) => {
+	const { user } = event.locals;
+
+	if (user) {
+
+			const userChannel = await channelsRepo.findForUser(user.id);
+
+			event.locals.channel = toPublicChannelView(userChannel);
+
+	}
+
 	return resolve(event);
 };
 
-export const handle = sequence(setUser)
+export const handle = sequence(setUser, setActiveChannel)

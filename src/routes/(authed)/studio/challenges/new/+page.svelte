@@ -1,11 +1,15 @@
 <script lang="ts">
 	import TextField from "$lib/components/theme/TextField.svelte";
   import type { ActionData } from "./$types";
+  import RichEditor from "$lib/components/editor/RichEditor.svelte";
 
   export let name: string;
   export let uri: string;
+  export let description: any;
 
   export let form: ActionData;
+
+  $: descriptionEncoded = JSON.stringify(description)
 </script>
 
 
@@ -27,6 +31,11 @@
           errors={form?.uri}
           showErrors={true}
           bind:value={uri} />
+    </div>
+
+    <div class="form-input">
+      <RichEditor name="description" bind:value={description} />
+      <input name="description" type="text" bind:value={descriptionEncoded} class="hidden" />
     </div>
   </div>
 

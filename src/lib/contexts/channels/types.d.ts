@@ -1,7 +1,7 @@
 
 export type ChannelMembershipRole = "OWNER" | "MEMBER";
 
-export interface IChannel {
+export interface IPublicChannel {
   id: number
   name: string
   uri: string

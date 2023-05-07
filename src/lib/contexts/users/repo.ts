@@ -3,7 +3,11 @@ import type { User } from '@prisma/client';
 
 const find = async (id: number): Promise<User> => {
   return await run(async (client) => { 
-    const user = await client.user.findUnique({ where: { id }, rejectOnNotFound: true})
+    const user = await client.user.findUnique({ 
+      where: {
+        id 
+      },
+      rejectOnNotFound: true})
     return user
   });
 }
