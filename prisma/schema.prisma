@@ -125,6 +125,8 @@ model Channel {
   // relations
   channel_memberships   ChannelMembership[]
   challenges            Challenge[]
+
+  @@unique([uri])
 }
 
 enum ChallengeType {

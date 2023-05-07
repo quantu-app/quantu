@@ -3,10 +3,20 @@ import { ChannelMembershipRole, type Channel } from '@prisma/client';
 import { UserNotCreatorError } from '$lib/contexts/users/errors';
 import type { ChannelCreateParams } from './types';
 
-const find = async (id: number): Promise<Channel> => {
+const findForUser = async (user_id: number): Promise<Channel> => {
   return await run(async (client) => { 
-    const channel = await client.channel.findUnique({ where: { id }, rejectOnNotFound: true})
-    return channel
+
+    const channelMembership = await client.channelMembership.findFirst({ 
+      where: {
+        user_id: user_id
+      },
+      select: {
+        channel: true
+      },
+      rejectOnNotFound: true
+    })
+
+    return channelMembership.channel
   });
 }
 
@@ -64,7 +74,7 @@ const create = async (params: ChannelCreateParams): Promise<Channel> => {
 
 
 export const channelsRepo = { 
-  find,
+  findForUser,
   findAllForUser,
   isUserOwner,
   create

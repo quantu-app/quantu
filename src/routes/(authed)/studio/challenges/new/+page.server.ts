@@ -11,12 +11,16 @@ export const actions: Actions = {
 
     console.log(channelName, channelURI)
 
-    const newChannel = await channelsRepo.create({
-      owner_id: locals.user.id,
-      name: channelName, 
-      uri: channelURI,
-      role: ChannelMembershipRole.OWNER
-    });
+    try {
+      const newChannel = await channelsRepo.create({
+        owner_id: locals.user.id,
+        name: channelName, 
+        uri: channelURI,
+        role: ChannelMembershipRole.OWNER
+      });
+    } catch (error) {
+      console.log(typeof(error), error.constructor.name);
+    }
 
     
     throw redirect(303, `${base}/studio/channels`);

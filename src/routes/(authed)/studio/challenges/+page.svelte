@@ -3,17 +3,17 @@
 	import type { PageData } from "./$types";
 
   export let data: PageData;
-
   
+  $: console.log(data);
 </script>
 
 <div class="container mx-auto my-4">
-  <a class="btn primary" href={`${base}/studio/channels/new`}>create channel</a>
+  <a class="btn btn-primary" href={`${base}/studio/challenges/new`}>create challenge</a>
   
   <div class="list">
-    {#each data.channels as channel}
-      {channel.name}
-    {/each}
+  {#each data.challenges as challenge, key}
+    <p data-key={key}>{challenge.name}</p>
+  {/each}
   </div>
 
 </div>

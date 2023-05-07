@@ -1,6 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { base } from '$app/paths';
+import { ChannelMembershipRole } from "@prisma/client";
 import { transaction } from '$lib/prisma';
 import { hash } from 'bcrypt';
 import jsonwebtoken from 'jsonwebtoken';
@@ -81,6 +82,17 @@ export const actions: Actions = {
 								locale: "en" // TODO: Set locale from user's browser
 							}
 						},
+						channel_memberships: {
+							create: {
+								role: ChannelMembershipRole.OWNER,
+								channel: {
+									create: {
+										name: username,
+										uri: username
+									}
+								}
+							}
+						}
 					}
 				})
 

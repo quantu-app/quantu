@@ -5,6 +5,7 @@ import jsonwebtoken, { TokenExpiredError } from 'jsonwebtoken';
 import { usersRepo } from '$lib/contexts/users/repo';
 import { toPublicUserJSON } from '$lib/contexts/users/presenters';
 import { Prisma } from '@prisma/client';
+import { InactiveUserError } from "$lib/contexts/users/errors";
 
 const setUser: Handle = async ({ event, resolve }) => {
 
@@ -12,12 +13,15 @@ const setUser: Handle = async ({ event, resolve }) => {
 
 	if (token) {
 		try { 
+
 			const { user_id } = (await jsonwebtoken.verify(token, env.JWT_SECRET)) as {
 				user_id: number;
 			};
+
 			const user = await usersRepo.find(user_id)
+
 			if (!user.active) {
-				throw new Error
+				throw new InactiveUserError()
 			}
 			event.locals.user = toPublicUserJSON(user);
 		} catch (error) {
@@ -31,9 +35,8 @@ const setUser: Handle = async ({ event, resolve }) => {
 			}
 		}
 	}
+
 	return resolve(event);
 };
-
-// TODO: set locale
 
 export const handle = sequence(setUser)

@@ -7,6 +7,7 @@ export const load: LayoutServerLoad = async (event) => {
 	}
 	
 	const user = event.locals.user;
+
 	if(!user.confirmed) {
 		// TODO: Implement sign-up completion
 		//throw redirect(302, '/sign_up_wizard')
