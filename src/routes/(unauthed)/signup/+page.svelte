@@ -18,7 +18,7 @@
 	<h1 class="mb-1">Sign up	</h1>
 	<p class="py-2">
 		Already a member?
-		<a href={`${base}/signin`} class="text-systemBlue-light">Sign in</a>
+		<a href={`${base}/signin`} class="link link-primary">Sign in</a>
 	</p>
 	<form
 		class="flex flex-col"

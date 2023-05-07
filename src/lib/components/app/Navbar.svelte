@@ -6,50 +6,45 @@
   export let user: IPublicUser | null = null;
 </script>
 
-<header class="relative flex flex-wrap sm:justify-start sm:flex-nowrap z-50 w-full bg-white text-sm py-1 border-b py-4">
+<header class="">
 
-  <nav class="w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between" aria-label="Global">
-  
-    <!-- WRAPPER_START -->
-    <div class="flex flex-row items-center justify-between w-full">
-  
+  <nav class="w-screen">
       <!-- PUBLIC ROOT -->
-      <div class="flex flex-row items-center">
-        <div class="flex">
-          <Link href={`${base}/`} class="flex-none text-xl font-semibold hidden md:block">QuantU</Link>
-          <Link href={`${base}/`} class="block md:hidden text-2xl font-bold">QU</Link>
+      <div class="navbar">
+        <div class="navbar-start">
+          <a href={`${base}/`} class="navbar-item hidden md:block font-bold">QuantU</a>
+          <a href={`${base}/`} class="navbar-item block md:hidden text-2xl font-bold">QU</a>
         </div>
   
         <!-- MAIN NAVIGATION LINKS -->
-        <div class="flex">
-          <ul class="ml-5 items-center flex sm:space-x-4">
+        <div class="navbar-center">
+          <ul class="navbar-item">
             <li>
-              <a
-                href={`${base}/channels`}
-                class="p-2 hover:bg-slate-200">
-                Channels
-              </a>
+              <a href={`${base}/channels`}>Channel Browser</a>
             </li>
           </ul>
         </div>
+
+        <!-- USER MENU -->
+        <div class="navbar-end">
+          <div class="avatar avatar-ring avatar-md">
+            <div class="dropdown-container">
+              <div class="dropdown">
+                <label class="btn btn-ghost flex cursor-pointer px-0" tabindex="0">
+                  <img src="https://i.pravatar.cc/150?u=a042581f4e29026024d" alt="avatar" />
+                </label>
+                <div class="dropdown-menu dropdown-menu-bottom-left">
+                  <a class="dropdown-item text-sm">Profile</a>
+                  <a tabindex="-1" class="dropdown-item text-sm">Account settings</a>
+                  {#if user && user.creator}
+                  <a tabindex="-1" class="dropdown-item text-sm">Studio</a>
+                  {/if}
+                  <a tabindex="-1" class="dropdown-item text-sm">Logout</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-  
-      <!-- USER MENU -->
-      <div class="action-menu">
-        {#if user}
-          <button class="btn btn-primary">Hello World</button>
-        {:else}
-        <ul class="ml-auto flex space-x-4">
-          <li>
-            <Link href={`${base}/signup`} class="text-gray-600 hover:text-sky-600 font-medium">Sign Up</Link>
-          </li>
-          <li>
-            <Link href={`${base}/signin`} class="text-gray-600 hover:text-sky-600 font-medium">Log in</Link>
-          </li>
-        </ul>
-        {/if}
-      </div>
-  
-    </div><!-- WRAPPER_END -->
   </nav>
   </header>

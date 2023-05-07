@@ -5,7 +5,6 @@
 	import { enhance } from '$app/forms';
 	import TextField from '$lib/components/theme/TextField.svelte';
 	import SecureField from '$lib/components/theme/SecureField.svelte';
-	import Button from '$lib/components/theme/Button.svelte';
 	import type { ActionData } from './$types';
 
 	let username = '';
@@ -18,7 +17,7 @@
 	<h1 class="mb-1">Sign In</h1>
 	<p class="py-2">
 		<span>Not a member?</span>	
-		<a href={`${base}/signup`}>sign up</a>
+		<a href={`${base}/signup`} class="link link-primary">sign up</a>
 	</p>
 	<form
 		class="flex flex-col"
