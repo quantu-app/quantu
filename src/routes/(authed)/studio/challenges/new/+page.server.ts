@@ -16,17 +16,17 @@ export const actions: Actions = {
     const { channel, user } = locals;
     const data = await request.formData();
     const name = data.get("name") as string;
-    const uri = data.get("uri") as string;
+    const url = data.get("url") as string;
     const description = JSON.parse(data.get("description"));
-
-    console.log(channel, user,  data.get("description"));
+    const prompt = JSON.parse(data.get("prompt"));
 
     const newChallenge = await challengesRepo.create({
       creator_id: user.id,
       channel_id: channel.id,
       name: name,
-      uri: uri,
-      description: description
+      url: url,
+      description: description,
+      prompt: prompt
     });
 
     throw redirect(303, `${base}/studio/challenges`);
