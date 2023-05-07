@@ -3,10 +3,8 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { enhance } from '$app/forms';
-	import { _ } from 'svelte-i18n';
 	import TextField from '$lib/components/theme/TextField.svelte';
 	import SecureField from '$lib/components/theme/SecureField.svelte';
-	import Link from '$lib/components/theme/Link.svelte';
 	import Button from '$lib/components/theme/Button.svelte';
 	import type { ActionData } from './$types';
 
@@ -17,10 +15,10 @@
 </script>
 
 <div class="md:w-72 w-full mx-auto my-auto bg-white dark:bg-gray-950 shadow p-4">
-	<h1 class="mb-1">{$_('users.signin.heading')}</h1>
+	<h1 class="mb-1">Sign In</h1>
 	<p class="py-2">
-		{$_("users.signin.signup_prompt") }
-		<Link href={`${base}/signup`}>{$_("users.signin.signup_link")}</Link>
+		<span>Not a member?</span>	
+		<a href={`${base}/signup`}>sign up</a>
 	</p>
 	<form
 		class="flex flex-col"
@@ -40,7 +38,7 @@
 		<div class="mb-2">
 			<TextField
 				name="username"
-				placeholder={$_("users.form_fields.username")}
+				placeholder="Username"
 				errors={form?.global}
 				showErrors={false}
 				bind:value={username} />
@@ -48,15 +46,14 @@
 		<div class="mb-2">
 			<SecureField 
 				name="password"
-				placeholder={$_("users.form_fields.password")}
+				placeholder="Password"
 				errors={form?.global}
 				showErrors={false}
 				bind:value={password}
 			/>
 		</div>
-		<Button 
+		<button
 			formaction="?/signin"
-			buttonStyle="borderedProminent"
-			label={$_('users.signin.button') } />
+			class="btn btn-primary">Sign in</button>
 	</form>
 </div>

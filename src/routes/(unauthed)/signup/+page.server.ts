@@ -7,7 +7,6 @@ import jsonwebtoken from 'jsonwebtoken';
 import { HASH_ROUNDS } from '$env/static/private';
 import { env } from '$env/dynamic/private';
 import type { ErrorMessage } from '$lib/types';
-import { getMessageFormatter, locale } from 'svelte-i18n';
 
 const usernameValidator = (value: string): ErrorMessage[] => {
 	const validRegex =  /^[a-z0-9]+$/
@@ -44,10 +43,8 @@ export const actions: Actions = {
 		const password = data.password as string;
 		const passwordConfirmation = data.passwordConfirmation as string;
 
-		// TODO: How do we translate server side
-		const result = getMessageFormatter("forms.empty_field", ).format({ field: "Username"})
 
-		if (!username) { return fail(422, { username: [{ message: result as string }] }) }
+		if (!username) { return fail(422, { username: [{ message: "Username cannot be empty"}] }) }
 		if (!password) { return fail(422, { password: [{ message: "Password cannot be empty"}] }) }
 		if (!passwordConfirmation) { return fail(422, { passwordConfirmation: [{ message: "Password confirmation cannot be empty"}] }) }
 	

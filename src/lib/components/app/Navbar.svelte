@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { base } from "$app/paths";
   import Link from "$lib/components/theme/Link.svelte";
-  import { _ } from "svelte-i18n";
-  let currentUser: any = null;
+	import type { IPublicUser } from "$lib/contexts/users/types";
 
+  export let user: IPublicUser | null = null;
 </script>
 
 <header class="relative flex flex-wrap sm:justify-start sm:flex-nowrap z-50 w-full bg-white text-sm py-1 border-b py-4">
@@ -16,8 +16,8 @@
       <!-- PUBLIC ROOT -->
       <div class="flex flex-row items-center">
         <div class="flex">
-          <Link href={`${base}/`} class="flex-none text-xl font-semibold hidden md:block">{$_("app.name")}</Link>
-          <Link href={`${base}/`} class="block md:hidden text-2xl font-bold">{$_("app.name_short")}</Link>
+          <Link href={`${base}/`} class="flex-none text-xl font-semibold hidden md:block">QuantU</Link>
+          <Link href={`${base}/`} class="block md:hidden text-2xl font-bold">QU</Link>
         </div>
   
         <!-- MAIN NAVIGATION LINKS -->
@@ -36,15 +36,15 @@
   
       <!-- USER MENU -->
       <div class="action-menu">
-        {#if currentUser}
-          <!-- render partial: "layouts/shared/user_menu" -->
+        {#if user}
+          <button class="btn btn-primary">Hello World</button>
         {:else}
         <ul class="ml-auto flex space-x-4">
           <li>
-            <Link href={`${base}/signup`} class="text-gray-600 hover:text-sky-600 font-medium">{$_("nav.signup")}</Link>
+            <Link href={`${base}/signup`} class="text-gray-600 hover:text-sky-600 font-medium">Sign Up</Link>
           </li>
           <li>
-            <Link href={`${base}/signin`} class="text-gray-600 hover:text-sky-600 font-medium">{$_("nav.signin")}</Link>
+            <Link href={`${base}/signin`} class="text-gray-600 hover:text-sky-600 font-medium">Log in</Link>
           </li>
         </ul>
         {/if}

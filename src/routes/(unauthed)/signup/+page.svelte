@@ -1,13 +1,11 @@
 <svelte:options immutable />
 
 <script lang="ts">
-	import { _ } from "svelte-i18n";
 	import { base } from '$app/paths';
 	import type { ActionData } from './$types';
 	import TextField from "$lib/components/theme/TextField.svelte";
 	import SecureField from "$lib/components/theme/SecureField.svelte";
 	import Button from "$lib/components/theme/Button.svelte";
-	import Link from "$lib/components/theme/Link.svelte";
 
 	let username = '';
 	let password = '';
@@ -17,10 +15,10 @@
 </script>
 
 <div class="md:w-72 mx-auto my-auto bg-white dark:bg-gray-950 shadow p-4">
-	<h1 class="mb-1">{$_("users.signup.heading") }</h1>
+	<h1 class="mb-1">Sign up	</h1>
 	<p class="py-2">
-		{$_("users.signup.signin_prompt") }
-		<a href={`${base}/signin`} class="text-systemBlue-light">{$_("users.signup.signin_link")}</a>
+		Already a member?
+		<a href={`${base}/signin`} class="text-systemBlue-light">Sign in</a>
 	</p>
 	<form
 		class="flex flex-col"
@@ -37,14 +35,14 @@
 		<div class="mb-2">
 			<TextField
 				name="username"
-				placeholder={$_("users.form_fields.username")}
+				placeholder="Username"
 				errors={form?.username}
 				bind:value={username} />
 		</div>
 		<div class="mb-2">
 			<SecureField 
 				name="password"
-				placeholder={$_("users.form_fields.password")}
+				placeholder="Password"
 				errors={form?.password}
 				bind:value={password}
 			/>
@@ -52,14 +50,13 @@
 		<div class="mb-2">
 			<SecureField 
 				name="passwordConfirmation"
-				placeholder={$_("users.form_fields.password_confirmation")}
+				placeholder="Password confirmation"
 				errors={form?.passwordConfirmation}
 				bind:value={passwordConfirmation}
 			/>
 		</div>
-		<Button 
+		<button 
 			formaction="?/signup"
-			buttonStyle="borderedProminent"
-			label={$_("users.signup.button")} />
+			class="btn btn-primary btn-sm">Sign up</button>
 	</form>
 </div>

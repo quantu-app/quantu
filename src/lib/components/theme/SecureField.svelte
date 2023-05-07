@@ -7,12 +7,7 @@
   export let errors: ErrorMessage[] = [];
   export let showErrors = true;
 
-  let baseClasses = "w-full block border rounded-lg bg-white"
-  let errorClasses = "text-systemRed-light border-systemRed-light"
-  let okClasses = "text-systemBlue-light border-systemBlue-light"
-
   $: hasErrors = errors && errors.length > 0
-  $: styleClasses = hasErrors ?  errorClasses : okClasses
 </script>
 
 <input
@@ -21,8 +16,8 @@
   placeholder={placeholder.length > 0 ?  placeholder : ''}
   bind:value={value}
 
-  class:error={hasErrors}
-  class="{baseClasses} {styleClasses}"/>
+  class:input-error={hasErrors}
+  class="input input-md input-primary"/>
 {#if hasErrors && showErrors}
   {#each errors as err}
     <span class="text-xs text-systemRed-light">{err.message}</span>
@@ -34,7 +29,7 @@
     color: rgb(0,122,255);
     opacity: 0.5;
   }
-  .error::placeholder {
+  .input-error::placeholder {
     color: rgb(255,59,48);
     opacity: 0.5;
   }
