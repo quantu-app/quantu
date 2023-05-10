@@ -2,25 +2,32 @@
 
 <script lang="ts">
 	import { base } from '$app/paths';
-	import type { ActionData } from './$types';
-	import TextField from "$lib/components/theme/TextField.svelte";
-	import SecureField from "$lib/components/theme/SecureField.svelte";
-	import Button from "$lib/components/theme/Button.svelte";
+	import { createForm } from "felte";
+	import { validator } from '@felte/validator-zod';
+	import * as zod from 'zod';
 
-	let username = '';
-	let password = '';
-	let passwordConfirmation = '';
+	const schema = zod.object({
+		email: zod.string().email().nonempty(),
+		username: zod.string().min(3).nonempty(),
+		password: zod.string().nonempty(),
+		passwordConfirmation: zod.string().nonempty(),
+	});
 
-	export let form: ActionData;
+
+
+	const { form } = createForm({
+		extend: validator({schema})
+	})
 </script>
 
 <div class="md:w-72 mx-auto my-auto bg-white dark:bg-gray-950 shadow p-4">
-	<h1 class="mb-1">Sign up	</h1>
+	<h1 class="mb-1">Sign up</h1>
 	<p class="py-2">
 		Already a member?
-		<a href={`${base}/signin`} class="link link-primary">Sign in</a>
+		<a href={`${base}/auth/signin`} class="link link-primary">Sign in</a>
 	</p>
 	<form
+		use:form
 		class="flex flex-col"
 		method="POST"
 		action="?/signup"
@@ -33,26 +40,26 @@
 			</div>
 		{/if}
 		<div class="mb-2">
-			<TextField
+			<input type="text"
+				name="email"
+				placeholder="Email" />
+		</div>
+		<div class="mb-2">
+			<input type="text"
 				name="username"
-				placeholder="Username"
-				errors={form?.username}
-				bind:value={username} />
+				placeholder="Username" />
 		</div>
 		<div class="mb-2">
-			<SecureField 
+			<input
+				type="password" 
 				name="password"
-				placeholder="Password"
-				errors={form?.password}
-				bind:value={password}
-			/>
+				placeholder="Password" />
 		</div>
 		<div class="mb-2">
-			<SecureField 
+			<input
+				type="password" 
 				name="passwordConfirmation"
 				placeholder="Password confirmation"
-				errors={form?.passwordConfirmation}
-				bind:value={passwordConfirmation}
 			/>
 		</div>
 		<button 

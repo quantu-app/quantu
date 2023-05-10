@@ -3,7 +3,8 @@ import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async (event) => {
 	if (!event.locals.user) {
-		throw redirect(302, '/signin');
+		console.log(event.locals);
+		throw redirect(302, '/auth/signin');
 	}
 	
 	const user = event.locals.user;

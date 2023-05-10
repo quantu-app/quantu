@@ -9,7 +9,7 @@ import { toPublicChannelView } from '$lib/contexts/channels/presenters';
 import { Prisma } from '@prisma/client';
 import { InactiveUserError } from "$lib/contexts/users/errors";
 
-const setUser: Handle = async ({ event, resolve }) => {
+const setUserFromToken: Handle = async ({ event, resolve }) => {
 
 	const token = event.cookies.get('token') as string | undefined;
 
@@ -57,4 +57,4 @@ const setActiveChannel: Handle = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-export const handle = sequence(setUser, setActiveChannel)
+export const handle = sequence(setUserFromToken, setActiveChannel)

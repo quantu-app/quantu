@@ -7,6 +7,13 @@ const find = async (id: number): Promise<User> => {
       where: {
         id 
       },
+      include: {
+        emails: {
+          where: {
+            primary: true
+          }
+        }
+      },
       rejectOnNotFound: true})
     return user
   });

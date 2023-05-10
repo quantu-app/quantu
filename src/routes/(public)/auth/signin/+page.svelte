@@ -17,7 +17,7 @@
 	<h1 class="mb-1">Sign In</h1>
 	<p class="py-2">
 		<span>Not a member?</span>	
-		<a href={`${base}/signup`} class="link link-primary">sign up</a>
+		<a href={`${base}/auth/signup`} class="link link-primary">sign up</a>
 	</p>
 	<form
 		class="flex flex-col"

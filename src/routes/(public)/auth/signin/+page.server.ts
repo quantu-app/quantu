@@ -24,12 +24,13 @@ export const actions: Actions = {
 			return fail(400, failMessage);
 		}
 
-		event.cookies.set(
-			'token',
-			await jsonwebtoken.sign({ user_id: user.id }, env.JWT_SECRET, {
-				expiresIn: env.JWT_EXPIRE_IN
-			})
-		);
+		console.log("!!! setting the token")
+		const token = jsonwebtoken.sign({ user_id: user.id }, env.JWT_SECRET, { 
+			expiresIn: env.JWT_EXPIRE_IN
+		})
+		event.cookies.set('token', token, {
+			path: '/'
+		})
 		throw redirect(303, `${base}/`);
 	}
 };

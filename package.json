@@ -69,13 +69,16 @@
     "@aicacia/json": "^0.1.16",
     "@aicacia/rand": "^0.2.14",
     "@aicacia/range": "^0.1.4",
+    "@felte/validator-zod": "^1.0.13",
     "@prisma/client": "^4.13.0",
     "@svelte-put/clickoutside": "^2.0.0",
     "@types/katex": "^0.16.0",
     "bcrypt": "^5.1.0",
+    "felte": "^1.2.7",
     "is-url": "^1.2.4",
     "jsonwebtoken": "^9.0.0",
     "katex": "^0.16.7",
+    "md5-js-tools": "^1.0.2",
     "rippleui": "^1.12.1",
     "slate": "^0.94.0",
     "slate-history": "^0.93.0",
@@ -84,6 +87,7 @@
     "svelte-portal": "^2.2.0",
     "svelte-slate": "^0.1.81",
     "uuid": "^9.0.0",
-    "vest": "^4.6.9"
+    "vest": "^4.6.9",
+    "zod": "^3.21.4"
   }
 }

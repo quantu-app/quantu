@@ -41,6 +41,7 @@ export const actions: Actions = {
 		// GET DATA
 		const data = Object.fromEntries(await event.request.formData());
 		const username = data.username as string;
+		const email = data.email as string;
 		const password = data.password as string;
 		const passwordConfirmation = data.passwordConfirmation as string;
 
@@ -82,6 +83,12 @@ export const actions: Actions = {
 								locale: "en" // TODO: Set locale from user's browser
 							}
 						},
+						emails: {
+							create: {
+								email: email,
+								primary: true
+							}
+						},
 						channel_memberships: {
 							create: {
 								role: ChannelMembershipRole.OWNER,
@@ -100,12 +107,10 @@ export const actions: Actions = {
 
 				return newUser;
 			});
-			event.cookies.set(
-				'token',
-				await jsonwebtoken.sign({ user_id: user.id }, env.JWT_SECRET, {
-					expiresIn: env.JWT_EXPIRE_IN
-				})
-			);
+			const token = await jsonwebtoken.sign({ user_id: user.id }, env.JWT_SECRET, {
+				expiresIn: env.JWT_EXPIRE_IN
+			});
+			event.cookies.set('token', token, { path: "/" })
 		} catch (error) {
 			// TODO: make this error generic
 			console.log(error);

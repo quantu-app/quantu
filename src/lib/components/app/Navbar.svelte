@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { base } from "$app/paths";
-  import Link from "$lib/components/theme/Link.svelte";
+	import Gravatar from "$lib/contexts/users/components/Gravatar.svelte";
 	import type { IPublicUser } from "$lib/contexts/users/types";
 
   export let user: IPublicUser | null = null;
@@ -32,14 +32,14 @@
               <div class="dropdown-container">
                 <div class="dropdown">
                   <label class="btn btn-ghost flex cursor-pointer px-0" tabindex="0">
-                    <img src="https://i.pravatar.cc/150?u=a042581f4e29026024d" alt="avatar" />
+                    <Gravatar hash={user.emailHash} />
                   </label>
                   <div class="dropdown-menu dropdown-menu-bottom-left">
                     <a href={`${base}/account/settings`} tabindex="-1" class="dropdown-item text-sm">Account settings</a>
                     {#if user.creator}
                       <a href={`${base}/studio`} tabindex="-1" class="dropdown-item text-sm">Studio</a>
                     {/if}
-                    <a href={`${base}/logout`} tabindex="-1" class="dropdown-item text-sm">Logout</a>
+                    <a href={`${base}/auth/logout`} tabindex="-1" class="dropdown-item text-sm">Logout</a>
                   </div>
                 </div>
               </div>
