@@ -49,11 +49,11 @@ model Email {
   updated_at DateTime @updatedAt
 
   // relations
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
+  user   User @relation(fields: [user_id], references: [id])
+  user_id Int
 
   // indices
-  @@unique([userId, email])
+  @@unique([user_id, email])
 }
 
 model OldPassword {

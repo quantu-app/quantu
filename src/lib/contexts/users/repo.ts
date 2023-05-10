@@ -1,5 +1,5 @@
 import { run } from '$lib/prisma';
-import type { User } from '@prisma/client';
+import type { PrismaClient, User, Email } from '@prisma/client';
 
 const find = async (id: number): Promise<User> => {
   return await run(async (client) => { 
@@ -19,5 +19,23 @@ const find = async (id: number): Promise<User> => {
   });
 }
 
+const findByEmail = async (email: string): Promise<User> => {
+  return await run(async (client) => {
+    const emailWithUser = await client.email.findFirst({
+      where: {
+        primary: true,
+        email: email,
+        confirmed: true
+      },
+      include: {
+        user: true
+      },
+      rejectOnNotFound: true
+    });
 
-export const usersRepo = { find };
+    return emailWithUser.user;
+  })
+}
+
+
+export const usersRepo = { find, findByEmail };

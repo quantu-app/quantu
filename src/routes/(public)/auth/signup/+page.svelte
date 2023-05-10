@@ -2,65 +2,81 @@
 
 <script lang="ts">
 	import { base } from '$app/paths';
-	import { createForm } from "felte";
-	import { validator } from '@felte/validator-zod';
-	import * as zod from 'zod';
+	import { superForm } from 'sveltekit-superforms/client'
+	import type { PageData } from './$types';
+	
 
-	const schema = zod.object({
-		email: zod.string().email().nonempty(),
-		username: zod.string().min(3).nonempty(),
-		password: zod.string().nonempty(),
-		passwordConfirmation: zod.string().nonempty(),
-	});
+	export let data: PageData;
 
-
-
-	const { form } = createForm({
-		extend: validator({schema})
-	})
+	const { form, errors, enhance, message } = superForm(data.form);
 </script>
 
 <div class="md:w-72 mx-auto my-auto bg-white dark:bg-gray-950 shadow p-4">
 	<h1 class="mb-1">Sign up</h1>
 	<p class="py-2">
 		Already a member?
-		<a href={`${base}/auth/signin`} class="link link-primary">Sign in</a>
+		<a href={`${base}/auth/signin`} class="underline text-blue-500">Sign in</a>
 	</p>
 	<form
-		use:form
+		use:enhance
 		class="flex flex-col"
 		method="POST"
 		action="?/signup"
 	>
-		{#if form?.global}
-			<div class="mb-2">
-			{#each form.global as err}
-				<span class="w-full text-systemRed-light">{err.message}</span>
-			{/each}
-			</div>
+		{#if $message}
+			<div class="text-sm text-red-600 mb-2">{$message}</div>
 		{/if}
 		<div class="mb-2">
 			<input type="text"
+				class="w-full border"
 				name="email"
-				placeholder="Email" />
-		</div>
-		<div class="mb-2">
-			<input type="text"
-				name="username"
-				placeholder="Username" />
+				class:border-slate-800={!$errors.email}
+				class:border-red-600={$errors.email}
+				class:placeholder-red-600={$errors.email}
+				data-invalid={$errors.email}
+				placeholder="Email"
+				bind:value={$form.email}
+			/>
+			{#if $errors.email}<span class="text-sm text-red-600">{$errors.email}</span>{/if}
 		</div>
 		<div class="mb-2">
 			<input
+				type="text"
+				class="w-full border"
+				class:border-red-600={$errors.username}
+				class:placeholder-red-600={$errors.username}
+				class:border-slate-800={!$errors.username}
+				name="username"
+				placeholder="Username"
+				bind:value={$form.username}
+			/>
+			{#if $errors.username}<span class="text-sm text-red-600">{$errors.username}</span>{/if}
+		</div>
+		<div class="mb-2">
+			<input
+				class="w-full border"
 				type="password" 
 				name="password"
-				placeholder="Password" />
+				class:border-red-600={$errors.password}
+				class:placeholder-red-600={$errors.password}
+				class:border-slate-800={!$errors.password}
+				placeholder="Password"
+				bind:value={$form.password}
+			/>
+			{#if $errors.password}<span class="text-sm text-red-600">{$errors.password}</span>{/if}
 		</div>
 		<div class="mb-2">
 			<input
+				class="w-full border"
+				class:border-red-600={$errors.password_confirmation}
+				class:placeholder-red-600={$errors.password_confirmation}
+				class:border-slate-800={!$errors.password_confirmation}
 				type="password" 
-				name="passwordConfirmation"
+				name="password_confirmation"
 				placeholder="Password confirmation"
+				bind:value={$form.password_confirmation}
 			/>
+			{#if $errors.password_confirmation}<span class="text-sm text-red-600">{$errors.password_confirmation}</span>{/if}
 		</div>
 		<button 
 			formaction="?/signup"

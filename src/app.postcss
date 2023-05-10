@@ -53,6 +53,15 @@
 	h6 {
 		@apply text-lg;
 	}
+
+	
 }
 
-
+@layer components {
+	.btn {
+		@apply text-base no-underline px-2 py-1 text-center font-bold uppercase outline-none focus:outline-none cursor-pointer border;
+	}
+	.btn.btn-primary {
+		@apply bg-systemBlue-light text-white;
+	}
+}

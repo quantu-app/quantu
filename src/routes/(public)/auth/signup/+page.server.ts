@@ -1,77 +1,46 @@
 import { fail, redirect } from '@sveltejs/kit';
-import type { Actions } from './$types';
+import type { Actions, PageServerLoad } from './$types';
 import { base } from '$app/paths';
-import { ChannelMembershipRole } from "@prisma/client";
+import { ChannelMembershipRole, Prisma } from "@prisma/client";
 import { transaction } from '$lib/prisma';
 import { hash } from 'bcrypt';
 import jsonwebtoken from 'jsonwebtoken';
 import { HASH_ROUNDS } from '$env/static/private';
 import { env } from '$env/dynamic/private';
-import type { ErrorMessage } from '$lib/types';
+import { z } from 'zod';
+import { superValidate, message } from 'sveltekit-superforms/server';
 
-const usernameValidator = (value: string): ErrorMessage[] => {
-	const validRegex =  /^[a-z0-9]+$/
-	value = value.trim().toLowerCase()
-	if (!validRegex.test(value)) {
-		return [{ message: "Username can only contain number and letters"}]
-	} else {
-		return []
-	}
-}
+const USERNAME_REGEX = /^[a-z0-9]+$/;
 
-const passwordValidator = (value: string): ErrorMessage[] => {
-	const minPasswordLen = parseInt(env.USERS_MIN_PASSWORD_LENGTH)
-	if (value.length < minPasswordLen) {
-		return [{ message: `Password must be at least ${minPasswordLen} characters long` }];
-	} else {
-		return []
-	}
-}
+const signUpSchema = z.object({
+	email: z.string().email(),
+	username: z.string().min(3).regex(USERNAME_REGEX),
+	password: z.string().min(6),
+	password_confirmation: z.string().min(6)
+}).refine(({ password, password_confirmation }) => password !== password_confirmation, { 
+	message: "Passwords do not match",
+	path: ["password_confirmation"] 
+});
 
-const passwordConfirmationValidator = (value: string, password: string): ErrorMessage[] => {
-	if (value !== password) {
-		return [{ message: "Password and password confirmation must be the same"}]
-	} else {
-		return []
-	}
+export const load: PageServerLoad = async () => {
+	const form = superValidate(signUpSchema);
+
+	return { form };
 }
 
 export const actions: Actions = {
-	signup: async (event) => {
-		// GET DATA
-		const data = Object.fromEntries(await event.request.formData());
-		const username = data.username as string;
-		const email = data.email as string;
-		const password = data.password as string;
-		const passwordConfirmation = data.passwordConfirmation as string;
+	signup: async ({ request, cookies }) => {
+		const form = await superValidate(request, signUpSchema);
 
-
-		if (!username) { return fail(422, { username: [{ message: "Username cannot be empty"}] }) }
-		if (!password) { return fail(422, { password: [{ message: "Password cannot be empty"}] }) }
-		if (!passwordConfirmation) { return fail(422, { passwordConfirmation: [{ message: "Password confirmation cannot be empty"}] }) }
-	
-		const usernameErrors = usernameValidator(username);
-		if (usernameErrors.length > 0) {
-			return fail(400, { username: usernameErrors });
-		}
-
-		const passwordErrors = passwordValidator(password);
-		if (passwordErrors.length > 0) {
-			return fail(400, { password: passwordErrors });
-		}
-		const passwordConfirmationErrors = passwordConfirmationValidator(
-			data.passwordConfirmation as string, password);
-		if (passwordConfirmationErrors.length > 0) {
-			return fail(400, { passwordConfirmation: passwordConfirmationErrors });
-		}
-
-
+    if (!form.valid) {
+      return fail(400, { form });
+    }
+		
 		try {
+			const { email, username, password } = form.data;
 			const encrypted_password = await hash(password, +HASH_ROUNDS);
 			const user = await transaction((client) => {
-
-				// create the new user
-				const newUser = client.user.create({ 
+				return client.user.create({ 
 					data: {
 						username,
 						encrypted_password,
@@ -80,12 +49,13 @@ export const actions: Actions = {
 						creator: false,
 						application_setting: {
 							create: {
-								locale: "en" // TODO: Set locale from user's browser
+								locale: "en" // TODO: Set locale from user's primary browser language (if supported)
 							}
 						},
 						emails: {
 							create: {
 								email: email,
+								confirmed: true, // TODO: Add E-mail confirmation to part of sign up process
 								primary: true
 							}
 						},
@@ -101,23 +71,22 @@ export const actions: Actions = {
 							}
 						}
 					}
-				})
-
-				// TODO: Send confirmation Email
-
-				return newUser;
+				});
 			});
+
 			const token = await jsonwebtoken.sign({ user_id: user.id }, env.JWT_SECRET, {
 				expiresIn: env.JWT_EXPIRE_IN
 			});
-			event.cookies.set('token', token, { path: "/" })
+
+			cookies.set('token', token, { path: "/" });
+
+			throw redirect(303, `${base}/`);
+
 		} catch (error) {
-			// TODO: make this error generic
-			console.log(error);
-			return fail(500, {
-				global: [{ message: "something went wrong" }]
-			});
+			if (error instanceof Prisma.PrismaClientKnownRequestError) {
+				return message(form, "Something went wrong")
+			}
+			throw error
 		}
-		throw redirect(303, `${base}/`);
 	}
 };

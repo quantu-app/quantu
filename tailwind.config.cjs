@@ -90,8 +90,7 @@ const config = {
 		plugin(({ addVariant }) => {
 			addVariant('optional', '&:optional');
 			addVariant('group-optional', ':merge(.group):optional &');
-		}),
-		require("rippleui")
+		})
 	]
 };
 

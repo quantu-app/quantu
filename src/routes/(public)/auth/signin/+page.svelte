@@ -2,57 +2,57 @@
 
 <script lang="ts">
 	import { base } from '$app/paths';
-	import { enhance } from '$app/forms';
-	import TextField from '$lib/components/theme/TextField.svelte';
-	import SecureField from '$lib/components/theme/SecureField.svelte';
-	import type { ActionData } from './$types';
+	import type { PageData } from './$types';
+	import { superForm } from "sveltekit-superforms/client";
 
-	let username = '';
-	let password = '';
+	export let data: PageData;
 
-	export let form: ActionData;
+	const { form, errors, message, enhance } = superForm(data.form);
 </script>
 
 <div class="md:w-72 w-full mx-auto my-auto bg-white dark:bg-gray-950 shadow p-4">
 	<h1 class="mb-1">Sign In</h1>
 	<p class="py-2">
 		<span>Not a member?</span>	
-		<a href={`${base}/auth/signup`} class="link link-primary">sign up</a>
+		<a href={`${base}/auth/signup`} class="underline text-blue-500">Sign up</a>
 	</p>
 	<form
-		class="flex flex-col"
 		method="POST"
-		use:enhance={() =>
-			async ({ update }) =>
-				update({ reset: false })}
 		action="?/signin"
 	>
-		{#if form?.global}
-			<div class="mb-2">
-			{#each form.global as err}
-				<span class="w-full text-systemRed-light">{err.message}</span>
-			{/each}
-			</div>
+		{#if $message}
+  		<div class="text-sm text-red-600 mb-2">{$message}</div>
 		{/if}
 		<div class="mb-2">
-			<TextField
-				name="username"
-				placeholder="Username"
-				errors={form?.global}
-				showErrors={false}
-				bind:value={username} />
+			<input
+				class="w-full border border-slate-800"
+				type="text"
+				name="email"
+				class:border-red-600={$errors.email}
+				class:placeholder-red-600={$errors.email}
+				placeholder="Email"
+				data-invalid={$errors.email}
+				bind:value={$form.email}
+			/>
+			{#if $errors.email}<span class="text-sm text-red-600">{$errors.email}</span>{/if}
 		</div>
 		<div class="mb-2">
-			<SecureField 
+			<input
+				class="w-full border border-slate-800"
+				type="password" 
 				name="password"
+				class:border-red-600={$errors.password}
+				class:placeholder-red-600={$errors.password}
 				placeholder="Password"
-				errors={form?.global}
-				showErrors={false}
-				bind:value={password}
+				data-invalid={$errors.password}
+				bind:value={$form.password}
 			/>
+			{#if $errors.password}<span class="text-sm text-red-600">{$errors.password}</span>{/if}
 		</div>
 		<button
 			formaction="?/signin"
-			class="btn btn-primary">Sign in</button>
+			class="btn btn-primary w-full">Sign in</button>
 	</form>
 </div>
+
+
