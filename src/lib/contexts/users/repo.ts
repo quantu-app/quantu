@@ -21,7 +21,7 @@ const find = async (id: number): Promise<User> => {
 
 const findByEmail = async (email: string): Promise<User> => {
   return await run(async (client) => {
-    const emailWithUser = await client.email.findFirst({
+    const emailWithUser = await client.email.findFirstOrThrow({
       where: {
         primary: true,
         email: email,
@@ -29,8 +29,7 @@ const findByEmail = async (email: string): Promise<User> => {
       },
       include: {
         user: true
-      },
-      rejectOnNotFound: true
+      }
     });
 
     return emailWithUser.user;

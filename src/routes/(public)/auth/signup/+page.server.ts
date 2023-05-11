@@ -33,10 +33,11 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
 	signup: async ({ request, cookies }) => {
 		const form = await superValidate(request, signUpSchema);
-		console.log(form.data);
+
     if (!form.valid) {
       return fail(400, { form });
     }
+		
 		try {
 			const { email, username, password } = form.data;
 			const encrypted_password = await hash(password, +HASH_ROUNDS);
@@ -46,8 +47,8 @@ export const actions: Actions = {
 						username,
 						encrypted_password,
 						active: true,
-						confirmed: false,
-						creator: false,
+						confirmed: true, // TODO: add email confirmation
+						creator: true,  // design the feature "creator"
 						application_setting: {
 							create: {
 								locale: "en" // TODO: Set locale from user's primary browser language (if supported)

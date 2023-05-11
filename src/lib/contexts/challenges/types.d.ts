@@ -1,6 +1,6 @@
 
 
-export type ChallengeCreateParams = {
+export type ICreateChallengeParams = {
   creator_id: number
   channel_id: number
   name: string

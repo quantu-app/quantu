@@ -1,5 +1,6 @@
 import { run } from '$lib/prisma';
 import type { Challenge } from '@prisma/client';
+import type { ICreateChallengeParams } from './types';
 
 const findAllForChannel = async (channel_id: number): Promise<Challenge[]> => {
   return await run(async (client) => { 
@@ -14,11 +15,11 @@ const findAllForChannel = async (channel_id: number): Promise<Challenge[]> => {
   });
 }
 
-const create = async (params: ChallengeCreateParams): Promise<Challenge> => {
+const create = async (params: ICreateChallengeParams): Promise<Challenge> => {
   return await run( async (client) => {
     const newChallenge = await client.challenge.create({
       data: {
-        owner_id: params.owner_id,
+        creator_id: params.creator_id,
         channel_id: params.channel_id,
         name: params.name,
         url: params.url,

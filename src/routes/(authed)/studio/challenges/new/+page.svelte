@@ -1,58 +1,67 @@
 <script lang="ts">
-	import TextField from "$lib/components/theme/TextField.svelte";
-  import type { ActionData } from "./$types";
+  import type { PageData } from "./$types";
   import RichEditor from "$lib/components/editor/RichEditor.svelte";
+	import { superForm } from "sveltekit-superforms/client";
 
-  export let name: string;
-  export let url: string;
-  export let description: any;
-  export let prompt: any;
+  export let data: PageData;
 
-  export let form: ActionData;
+	const { form, errors, message } = superForm(data.form, { dataType: 'json'});
 
-  $: descriptionEncoded = JSON.stringify(description)
-  $: promptEncoded = JSON.stringify(prompt)
+  let rteDescription = "";
+
+  $: $form.description = JSON.stringify(rteDescription)
+
 </script>
 
 
 <form method="POST" action="?/create">
-  <div class="metainfo">
-    <div class="form-field">
-      <div class="form-control">
-      <TextField
-          name="name"
-          placeholder="Name"
-          errors={form?.name}
-          showErrors={true}
-          bind:value={name} />
+  <div id="challenge--metainfo" class="mt-4 border-b pb-4 mb-4 border-slate-200">
+    <h4 class="font-bold">Meta Info</h4>
+    <div class="flex flex-row gap-4">
+      <div class="form-field my-2 w-1/2">
+        <div class="form-control">
+          <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              class="w-full border bg-white"
+              class:border-slate-800={!$errors.name}
+              class:border-red-600={$errors.name}
+              class:placeholder-red-600={$errors.name}
+              data-invalid={$errors.name}
+              bind:value={$form.name}
+          />
+          {#if $errors.name}<span class="text-sm text-red-600">{$errors.name}</span>{/if}
+        </div>
       </div>
-    </div>
 
-    <div class="form-field">
-      <div class="form-control">
-      <TextField
-          name="url"
-          placeholder="URL"
-          errors={form?.url}
-          showErrors={true}
-          bind:value={url} />
+      <div class="form-field my-2 w-1/2">
+        <div class="form-control">
+          <input
+            type="text"
+            name="url"
+            class="w-full border bg-white"
+            class:border-slate-800={!$errors.url}
+            class:border-red-600={$errors.url}
+            class:placeholder-red-600={$errors.url}
+            placeholder="URL"
+            data-invalid={$errors.url}
+            bind:value={$form.url}
+          />
+          {#if $errors.url}<span class="text-red-600 text-sm">{$errors.url}</span>{/if}
+        </div>
       </div>
     </div>
 
     <div class="form-field">
       <label for="description" class="form-label">Description</label>
-      <RichEditor name="description" bind:value={description} />
-      <input name="description" type="text" bind:value={descriptionEncoded} class="hidden" />
+      <RichEditor name="description" bind:value={rteDescription} hasError={!!$errors.description} />
+      <input name="description" type="text" bind:value={$form.description} class="hidden" />
+      {#if $errors.description}<span class="text-red-600 text-sm">{$errors.description}</span>{/if}
     </div>
   </div>
 
-  <div class="challengeInfo">
-    <div class="form-field">
-      <label for="prompt" class="form-label">Prompt</label>
-      <RichEditor name="prompt" bind:value={prompt} />
-      <input name="prompt" type="text" bind:value={promptEncoded} class="hidden" />
-    </div>
+  <div class="my-4">
+    <button class="btn btn-primary text-sm">Create</button>
   </div>
-
-  <button class="btn btn-primary btn-sm">Create</button>
 </form>

@@ -5,10 +5,12 @@
   export let data: PageData;
 </script>
 
-<h2>{data.channel.name}</h2>
+<h2>@{data.channel.name}</h2>
 
-<ul>
-  <li>
-    <a href={`${base}/studio/challenges`} class="link link-primary">Challenges</a>
-  </li>
-</ul>
+<div class="my-4">
+  <ul>
+    <li>
+      <a href={`${base}/studio/challenges`} class="underline">Challenges</a>
+    </li>
+  </ul>
+</div>

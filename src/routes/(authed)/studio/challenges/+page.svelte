@@ -8,7 +8,7 @@
 </script>
 
 <div class="container mx-auto my-4">
-  <a class="btn btn-primary" href={`${base}/studio/challenges/new`}>create challenge</a>
+  <a class="btn btn-primary" href={`${base}/studio/challenges/new`}>new challenge</a>
   
   <div class="list">
   {#each data.challenges as challenge, key}

@@ -13,6 +13,7 @@
 	export let placeholder = 'Type...';
 	export let editor: (BaseEditor & ISvelteEditor & HistoryEditor) | undefined = undefined;
 	export let showHelper = false;
+	export let hasError = false;
 	export let onChange: (name?: string) => void = () => undefined;
 
 	$: if (!value || value.length === 0) {
@@ -23,7 +24,13 @@
 	}
 </script>
 
-<div {id} {name} class="p-2 w-full bg-white border-2 border-systemBlue-light rounded-lg">
+<div
+	{id}
+	data-name={name}
+	class="p-2 w-full bg-white border"
+	class:border-slate-800={!hasError}
+	class:border-red-600={hasError}
+	>
 	<Editor
 		bind:value
 		bind:editor
