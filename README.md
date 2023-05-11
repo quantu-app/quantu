@@ -2,6 +2,8 @@
 
 ## Features
 
+Quantu is a learning platform based on channels. Content creators can create a channel and post learning content to it. Learners across the platform can subscribe to channels and study the learning materials available on them.
+
 ### 1. Channels
 
 Every user has a personal channel
