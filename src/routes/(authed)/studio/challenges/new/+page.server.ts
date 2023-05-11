@@ -8,7 +8,10 @@ import { z } from "zod";
 const createChallengeSchema = z.object({
   name: z.string().nonempty(),
   url: z.string().nonempty().regex(/^[a-zA-Z0-9_-]*$/),
-  description: z.string()
+  description: z.string(),
+  prompt: z.string(),
+  visible: z.boolean().default(false),
+  released_at: z.string().datetime({offset: false})
 });
 
 
@@ -22,7 +25,7 @@ export const load: PageServerLoad = (_event) => {
 export const actions: Actions = {
   create: async ({ request, locals }) => {
     const form = await superValidate(request, createChallengeSchema);
-
+    console.log(form);
     if (!form.valid) {
       return fail(400, { form });
     }
@@ -30,9 +33,8 @@ export const actions: Actions = {
     const { channel, user } = locals;
 
     // parse json data
-    const { name, url, description } = form.data;
+    const { name, url, description, visible, released_at } = form.data;
     const parsedDescription = JSON.parse(description)
-    // const parsedPrompt = JSON.parse(form.data.prompt)
 
     const newChallenge = await challengesRepo.create({
       creator_id: user.id,
@@ -40,6 +42,8 @@ export const actions: Actions = {
       name: name,
       url: url,
       description: parsedDescription,
+      visible: visible,
+      released_at: released_at,
       prompt: {}
     });
 

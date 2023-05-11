@@ -2,14 +2,19 @@
   import type { PageData } from "./$types";
   import RichEditor from "$lib/components/editor/RichEditor.svelte";
 	import { superForm } from "sveltekit-superforms/client";
+  import { DateInput } from 'date-picker-svelte'
 
   export let data: PageData;
 
 	const { form, errors, message } = superForm(data.form, { dataType: 'json'});
 
   let rteDescription = "";
+  let releasedAt = $form.released_at ? new Date($form.released_at) : new Date();
+
+  $form.released_at = releasedAt.toISOString()
 
   $: $form.description = JSON.stringify(rteDescription)
+  $: $form.released_at = releasedAt.toISOString()
 
 </script>
 
@@ -61,7 +66,32 @@
     </div>
   </div>
 
+  <div id="challenge--releaseInfo" class="border-b pb-4 mb-4 border-slate-200">
+    <h4 class="font-bold">Visibility &amp; Release</h4>
+
+    <div class="flex flex-row gap-4">
+      <div class="form-field my-2 w-1/2">
+        <label for="visible" class="form-label">Visible</label>
+        <input name="visible" type="checkbox" bind:value={$form.visible} />
+        {#if $errors.visible}<span class="text-red-600 text-sm">{$errors.visible}</span>{/if}
+      </div>
+
+      <div class="form-field my-2 w-1/2">
+        <label for="released_at" class="form-label">Released at</label>
+        <DateInput bind:value={releasedAt} class="w-full"/>
+        <input name="released_at" type="text" bind:value={$form.released_at} class="hidden" />
+        {#if $errors.visible}<span class="text-red-600 text-sm">{$errors.released_at}</span>{/if}
+      </div>
+    </div>
+  </div>
+
   <div class="my-4">
     <button class="btn btn-primary text-sm">Create</button>
   </div>
 </form>
+
+<style>
+  :root { 
+    --date-input-width: 100%;
+  }
+</style>

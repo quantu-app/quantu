@@ -7,4 +7,6 @@ export type ICreateChallengeParams = {
   url: string
   description: any
   prompt: any
+  visible: boolean
+  released_at: string
 }
