@@ -17,7 +17,9 @@ const signUpSchema = z.object({
 	username: z.string().min(3).regex(USERNAME_REGEX),
 	password: z.string().min(6),
 	password_confirmation: z.string().min(6)
-}).refine(({ password, password_confirmation }) => password !== password_confirmation, { 
+}).refine(({ password, password_confirmation }) => {
+	return password === password_confirmation
+}, { 
 	message: "Passwords do not match",
 	path: ["password_confirmation"] 
 });
@@ -31,11 +33,10 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
 	signup: async ({ request, cookies }) => {
 		const form = await superValidate(request, signUpSchema);
-
+		console.log(form.data);
     if (!form.valid) {
       return fail(400, { form });
     }
-		
 		try {
 			const { email, username, password } = form.data;
 			const encrypted_password = await hash(password, +HASH_ROUNDS);
@@ -61,11 +62,11 @@ export const actions: Actions = {
 						},
 						channel_memberships: {
 							create: {
-								role: ChannelMembershipRole.OWNER,
+								role: ChannelMembershipRole.PERSONAL,
 								channel: {
 									create: {
 										name: username,
-										uri: username
+										uri: username,
 									}
 								}
 							}

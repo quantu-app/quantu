@@ -8,7 +8,7 @@
 
 	export let data: PageData;
 
-	const { form, errors, enhance, message } = superForm(data.form);
+	const { form, errors, message } = superForm(data.form);
 </script>
 
 <div class="md:w-72 mx-auto my-auto bg-white dark:bg-gray-950 shadow p-4">
@@ -18,7 +18,6 @@
 		<a href={`${base}/auth/signin`} class="underline text-blue-500">Sign in</a>
 	</p>
 	<form
-		use:enhance
 		class="flex flex-col"
 		method="POST"
 		action="?/signup"

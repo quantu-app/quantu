@@ -91,6 +91,7 @@ model ApplicationSetting {
 }
 
 enum ChannelMembershipRole {
+  PERSONAL
   OWNER
   MEMBER
 }
