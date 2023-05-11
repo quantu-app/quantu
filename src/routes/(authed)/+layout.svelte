@@ -1,9 +1,7 @@
 <svelte:options immutable />
 
 <script lang="ts" context="module">
-	import '../../app.postcss';
 	import Navbar from '$lib/components/app/Navbar.svelte';
-	
 </script>
 
 <script lang="ts">
@@ -12,8 +10,8 @@
 		export let data: PageData;
 </script>
 
-<div class="app--contents">
-	<div class="app--navigation">
+<div class="app--contents w-screen h-screen">
+	<div class="app--navigation w-full">
 		<Navbar user={data.user}/>
 	</div>
 	<main class="app--main">

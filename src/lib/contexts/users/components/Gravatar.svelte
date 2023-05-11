@@ -12,7 +12,7 @@
 </script>
 
 <img
-	class="rounded-circle"
+	class="rounded-full h-full w-full"
 	src={`${gravatarBaseUrl}${hash}?s=${size}&r=${rating}&d=${fallbackImage}`}
 	{alt}
 />
