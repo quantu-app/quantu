@@ -73,6 +73,8 @@
     "@aicacia/range": "^0.1.4",
     "@prisma/client": "^4.13.0",
     "@svelte-put/clickoutside": "^2.0.0",
+    "@tanstack/svelte-table": "^8.9.1",
+    "@tanstack/table-core": "^8.9.1",
     "@types/katex": "^0.16.0",
     "bcrypt": "^5.1.0",
     "is-url": "^1.2.4",
