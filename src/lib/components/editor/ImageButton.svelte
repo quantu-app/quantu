@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { getEditorContext } from 'svelte-slate';
 	import Button from './Button.svelte';
-	import isUrl from "is-url";
-	import { insertImage } from 'svelte-slate/dist/plugins/ImageElement.svelte';
-	import Modal from "$lib/components/Modal.svelte";
+	import MdImage from 'svelte-icons/md/MdImage.svelte';
+	import MdCheck from 'svelte-icons/md/MdCheck.svelte';
+	import { insertImage, isUrl } from 'svelte-slate/plugins';
+	import Modal from '../Modal.svelte';
 
 	const editorContext = getEditorContext();
 	$: editor = $editorContext;
@@ -24,7 +25,7 @@
 </script>
 
 <Button {onMouseDown}>
-	<i class="bi bi-image" />
+	<MdImage />
 </Button>
 
 <Modal bind:open={entering}>
@@ -36,6 +37,6 @@
 			placeholder="Image URL"
 			bind:value={url}
 		/>
-		<Button active={!isUrl(url)} onMouseDown={onEnter}><i class="bi bi-check" /></Button>
+		<Button active={!isUrl(url)} onMouseDown={onEnter}><MdCheck /></Button>
 	</div>
 </Modal>

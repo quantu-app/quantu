@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { getEditorContext } from 'svelte-slate';
+	import MdCode from 'svelte-icons/md/MdCode.svelte';
 	import Button from './Button.svelte';
-	import { insertCode } from 'svelte-slate/dist/plugins/CodeElement.svelte';
-	import { isBlockActive } from 'svelte-slate/dist/plugins/utils';
+	import { insertCode, isBlockActive } from 'svelte-slate/plugins';
 
 	const editorContext = getEditorContext();
 	$: editor = $editorContext;
@@ -12,5 +12,5 @@
 </script>
 
 <Button {active} {onMouseDown}>
-	<i class="bi bi-code-square" />
+	<MdCode />
 </Button>

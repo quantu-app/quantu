@@ -1,11 +1,11 @@
-<svelte:options immutable={true} />
+<svelte:options immutable />
 
 <script lang="ts">
 	export let active = false;
-	export let onMouseDown: (event: MouseEvent) => void;
+	export let onMouseDown: (event: MouseEvent) => void = () => undefined;
 </script>
 
-<button class={$$props['class']} class:active on:mousedown={onMouseDown}>
+<button class={$$props['class']} class:active on:mousedown|stopPropagation={onMouseDown}>
 	<div>
 		<slot />
 	</div>

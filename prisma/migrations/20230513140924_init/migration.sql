@@ -1,38 +1,8 @@
-/*
-  Warnings:
-
-  - You are about to drop the `ApplicationSettings` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Email` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `OldPasswords` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `User` table. If the table is not empty, all the data it contains will be lost.
-
-*/
 -- CreateEnum
-CREATE TYPE "ChannelMembershipRole" AS ENUM ('OWNER', 'MEMBER');
+CREATE TYPE "ChannelMembershipRole" AS ENUM ('PERSONAL', 'OWNER', 'MEMBER');
 
 -- CreateEnum
 CREATE TYPE "ChallengeType" AS ENUM ('MULTIPLE_CHOICE');
-
--- DropForeignKey
-ALTER TABLE "ApplicationSettings" DROP CONSTRAINT "ApplicationSettings_userId_fkey";
-
--- DropForeignKey
-ALTER TABLE "Email" DROP CONSTRAINT "Email_userId_fkey";
-
--- DropForeignKey
-ALTER TABLE "OldPasswords" DROP CONSTRAINT "OldPasswords_userId_fkey";
-
--- DropTable
-DROP TABLE "ApplicationSettings";
-
--- DropTable
-DROP TABLE "Email";
-
--- DropTable
-DROP TABLE "OldPasswords";
-
--- DropTable
-DROP TABLE "User";
 
 -- CreateTable
 CREATE TABLE "users" (

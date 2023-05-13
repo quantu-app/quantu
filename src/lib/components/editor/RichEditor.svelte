@@ -1,4 +1,4 @@
-<svelte:options immutable={true} />
+<svelte:options immutable />
 
 <script lang="ts">
 	import type { BaseEditor, Selection } from 'slate';
@@ -12,32 +12,20 @@
 	export let selection: Selection | null = null;
 	export let placeholder = 'Type...';
 	export let editor: (BaseEditor & ISvelteEditor & HistoryEditor) | undefined = undefined;
-	export let showHelper = false;
-	export let hasError = false;
-	export let onChange: (name?: string) => void = () => undefined;
+	export let autoFocus = false;
 
 	$: if (!value || value.length === 0) {
 		value = [{ type: 'paragraph', children: [{ text: '' }] }];
 	}
-	function onChangeInternal() {
-		onChange(name);
-	}
 </script>
 
-<div
+<Editor
 	{id}
-	data-name={name}
-	class="p-2 w-full bg-white border"
-	class:border-slate-800={!hasError}
-	class:border-red-600={hasError}
-	>
-	<Editor
-		bind:value
-		bind:editor
-		bind:selection
-		readOnly={false}
-		{placeholder}
-		hoveringToolbar={!showHelper}
-		onChange={onChangeInternal}
-	/>
-</div>
+	{name}
+	bind:value
+	bind:editor
+	bind:selection
+	readOnly={false}
+	{autoFocus}
+	{placeholder}
+/>
