@@ -3,6 +3,16 @@ import { ChannelMembershipRole, type Channel } from '@prisma/client';
 import { UserNotCreatorError } from '$lib/contexts/users/errors';
 import type { ChannelCreateParams } from './types';
 
+const find = async (id: number): Promise<Channel> => {
+  return await run(async (client) => { 
+    return await client.channel.findFirstOrThrow({ 
+      where: {
+        id 
+      }
+    });
+  });
+}
+
 const findForUser = async (user_id: number): Promise<Channel> => {
   return await run(async (client) => { 
 
@@ -73,7 +83,8 @@ const create = async (params: ChannelCreateParams): Promise<Channel> => {
 }
 
 
-export const channelsRepo = { 
+export const channelsRepo = {
+  find,
   findForUser,
   findAllForUser,
   isUserOwner,

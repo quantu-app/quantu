@@ -4,7 +4,7 @@ import { MD5 } from "md5-js-tools"
 
 export function toPublicUserJSON(user: User & { emails: Email[]}): IPublicUser {
   
-  const primaryEmail = user.emails[0] ? user.emails[0].email : "";
+  const primaryEmail = user.emails && user.emails[0] ? user.emails[0].email : "";
 
   return {
     id: user.id,

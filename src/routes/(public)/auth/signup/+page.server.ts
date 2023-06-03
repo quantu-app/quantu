@@ -1,7 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { base } from '$app/paths';
-import { ChannelMembershipRole, Prisma } from "@prisma/client";
+import { ChannelMembershipRole, Prisma, type Channel, type User } from "@prisma/client";
 import { transaction } from '$lib/prisma';
 import { hash } from 'bcrypt';
 import jsonwebtoken from 'jsonwebtoken';
@@ -41,8 +41,10 @@ export const actions: Actions = {
 		try {
 			const { email, username, password } = form.data;
 			const encrypted_password = await hash(password, +HASH_ROUNDS);
-			const user = await transaction((client) => {
-				return client.user.create({ 
+			const now = new Date();
+
+			const result: { user: User, channel: Channel } = await transaction(async (client) => {
+				const newUser = await client.user.create({
 					data: {
 						username,
 						encrypted_password,
@@ -58,6 +60,7 @@ export const actions: Actions = {
 							create: {
 								email: email,
 								confirmed: true, // TODO: Add E-mail confirmation to part of sign up process
+								confirmedAt: now,
 								primary: true
 							}
 						},
@@ -74,9 +77,27 @@ export const actions: Actions = {
 						}
 					}
 				});
+
+				console.log(newUser.id);
+
+				const newPersonalChannelMembership = await client.channelMembership.findFirstOrThrow(
+					{ 
+						where: {
+							role: ChannelMembershipRole.PERSONAL,
+							user_id: newUser.id,
+						},
+						include: {
+							channel: true
+						}
+					}
+				);
+
+				return { user: newUser, channel: newPersonalChannelMembership.channel }
 			});
 
-			const token = await jsonwebtoken.sign({ user_id: user.id }, env.JWT_SECRET, {
+			const { user, channel } = result;
+
+			const token = await jsonwebtoken.sign({ user_id: user.id, channel_id: channel.id }, env.JWT_SECRET, {
 				expiresIn: env.JWT_EXPIRE_IN
 			});
 

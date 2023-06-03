@@ -11,7 +11,7 @@
 	const { form, errors, message } = superForm(data.form);
 </script>
 
-<div class="md:w-72 mx-auto my-auto bg-white dark:bg-gray-950 shadow p-4">
+<div class="w-96 mx-auto my-auto bg-white dark:bg-gray-950 shadow p-4">
 	<h1 class="mb-1">Sign up</h1>
 	<p class="py-2">
 		Already a member?
@@ -36,7 +36,7 @@
 				placeholder="Email"
 				bind:value={$form.email}
 			/>
-			{#if $errors.email}<span class="text-sm text-red-600">{$errors.email}</span>{/if}
+			{#if $errors.email}<span class="text-xs text-red-600">{$errors.email}</span>{/if}
 		</div>
 		<div class="mb-2">
 			<input
@@ -49,7 +49,7 @@
 				placeholder="Username"
 				bind:value={$form.username}
 			/>
-			{#if $errors.username}<span class="text-sm text-red-600">{$errors.username}</span>{/if}
+			{#if $errors.username}<span class="text-xs text-red-600">{$errors.username}</span>{/if}
 		</div>
 		<div class="mb-2">
 			<input
@@ -62,7 +62,7 @@
 				placeholder="Password"
 				bind:value={$form.password}
 			/>
-			{#if $errors.password}<span class="text-sm text-red-600">{$errors.password}</span>{/if}
+			{#if $errors.password}<span class="text-xs text-red-600">{$errors.password}</span>{/if}
 		</div>
 		<div class="mb-2">
 			<input
@@ -75,7 +75,7 @@
 				placeholder="Password confirmation"
 				bind:value={$form.password_confirmation}
 			/>
-			{#if $errors.password_confirmation}<span class="text-sm text-red-600">{$errors.password_confirmation}</span>{/if}
+			{#if $errors.password_confirmation}<span class="text-xs text-red-600">{$errors.password_confirmation}</span>{/if}
 		</div>
 		<button 
 			formaction="?/signup"

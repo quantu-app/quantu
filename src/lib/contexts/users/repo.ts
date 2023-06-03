@@ -1,7 +1,7 @@
 import { run } from '$lib/prisma';
 import type { PrismaClient, User, Email } from '@prisma/client';
 
-const find = async (id: number): Promise<User> => {
+const find = async (id: number): Promise<User & { emails: Email[] }> => {
   return await run(async (client) => { 
     const user = await client.user.findUnique({ 
       where: {

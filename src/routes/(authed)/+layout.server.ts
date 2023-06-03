@@ -2,12 +2,12 @@ import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async (event) => {
-	if (!event.locals.user) {
-		console.log(event.locals);
+	if (!event.locals.user || !event.locals.channel) {
 		throw redirect(302, '/auth/signin');
 	}
 	
 	const user = event.locals.user;
+	const channel = event.locals.channel;
 
 	if(!user.confirmed) {
 		// TODO: Implement sign-up completion
@@ -15,6 +15,7 @@ export const load: LayoutServerLoad = async (event) => {
 	}
 
 	return {
-		user: event.locals.user
+		user: event.locals.user,
+		channel: channel
 	};
 };

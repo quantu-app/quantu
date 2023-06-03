@@ -16,17 +16,20 @@ const setUserFromToken: Handle = async ({ event, resolve }) => {
 	if (token) {
 		try { 
 
-			const { user_id } = (await jsonwebtoken.verify(token, env.JWT_SECRET)) as {
+			const { user_id, channel_id } = (await jsonwebtoken.verify(token, env.JWT_SECRET)) as {
 				user_id: number;
+				channel_id: number;
 			};
 
 			const user = await usersRepo.find(user_id)
+			const userActiveChannel = await channelsRepo.find(channel_id);
 
 			if (!user.active) {
 				throw new InactiveUserError()
 			}
 
 			event.locals.user = toPublicUserJSON(user);
+			event.locals.channel = toPublicChannelView(userActiveChannel)
 
 		} catch (error) {
 			if (error instanceof TokenExpiredError) {
